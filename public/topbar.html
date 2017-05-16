@@ -16,6 +16,13 @@ _________________________________________________________ -->
                 <!--<li><a href="contact.html">Contact</a></li>-->
                 <!--<li><a href="#">Recently viewed</a></li>-->
             </ul>
+             <ul class="menu">
+                <li id="OAuthLogin"><a href="/oauthlogin">OAuthLogin</a></li>
+                <li id="OAuthLogout"><a href="/oauthlogout">OAuthLogout</a></li>
+                 <li id="tokens"><a href="/tokens">Tokens</a></li>
+                <li id="special"><a href="/special">special</a></li>
+                <li id="admin"><a href="/admin">realm:admin</a></li>
+            </ul>
         </div>
     </div>
     <div class="modal fade" id="login-modal" tabindex="-1" role="dialog"
@@ -132,17 +139,21 @@ _________________________________________________________ -->
             username($.cookie('logged_in'), function (username) {
                 if (typeof username !== 'undefined') {
                     $("#login").remove();
+                    $("#OAuthLogin").remove();
                     $("#register").remove();
                     $("#howdy").append('<a href="#">Logged in as ' + username + '<\/a>').hide().fadeIn(200);
                     $("#logout").hide().fadeIn(200);
+                    $("#OAuthLogout").hide().fadeIn(200);
                 } else {
                     $("#howdy").remove()
                     $("#logout").remove()
+                    $("#OAuthLogout").remove()
                 }
             });
         } else {
             $("#howdy").remove()
             $("#logout").remove()
+            $("#OAuthLogout").remove()
         }
 
     })

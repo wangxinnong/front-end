@@ -5,3 +5,6 @@
 /coverage
 
 .idea
+/keycloak_config/
+/.settings/
+/.project

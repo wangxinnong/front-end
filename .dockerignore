@@ -1,0 +1,7 @@
+keycloak.json
+node_modules
+.git
+.idea
+.settings
+.project
+deploy

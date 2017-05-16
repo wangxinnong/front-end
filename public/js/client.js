@@ -182,6 +182,7 @@ function username(id, callback) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.error('Could not get user information: ' + id + ', due to: ' + textStatus + ' | ' + errorThrown);
+            return callback(undefined);
         }
     });
 }

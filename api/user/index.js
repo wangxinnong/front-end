@@ -3,10 +3,19 @@
 
     var async = require("async"), express = require("express"), request = require("request"), endpoints = require("../endpoints"), helpers = require("../../helpers"), app = express(), cookie_name = "logged_in"
 
-
-    app.get("/customers/:id", function(req, res, next) {
-        helpers.simpleHttpRequest(endpoints.customersUrl + "/" + req.session.customerId, res, next);
-    });
+//
+//    app.get("/customers/:id", function(req, res, next) {
+//        helpers.simpleHttpRequest(endpoints.customersUrl + "/" + req.session.customerId, res, next);
+//    });
+     app.get("/customers/:id", function(req, res, next) {
+    	 console.log('/customers/:id');
+    	 var o = {
+            firstName:req.kauth.grant.id_token.content.given_name,
+            lastName:req.kauth.grant.id_token.content.family_name,
+            username:req.kauth.grant.id_token.content.name
+    	 }
+    	 res.end(JSON.stringify(o));
+	});
     app.get("/cards/:id", function(req, res, next) {
         helpers.simpleHttpRequest(endpoints.cardsUrl + "/" + req.params.id, res, next);
     });
@@ -247,69 +256,69 @@
         );
     });
 
-    app.get("/login", function(req, res, next) {
-        console.log("Received login request");
-
-        async.waterfall([
-                function(callback) {
-                    var options = {
-                        headers: {
-                            'Authorization': req.get('Authorization')
-                        },
-                        uri: endpoints.loginUrl
-                    };
-                    request(options, function(error, response, body) {
-                        if (error) {
-                            callback(error);
-                            return;
-                        }
-                        if (response.statusCode == 200 && body != null && body != "") {
-                            console.log(body);
-                            var customerId = JSON.parse(body).user.id;
-                            console.log(customerId);
-                            req.session.customerId = customerId;
-                            callback(null, customerId);
-                            return;
-                        }
-                        console.log(response.statusCode);
-                        callback(true);
-                    });
-                },
-                function(custId, callback) {
-                    var sessionId = req.session.id;
-                    console.log("Merging carts for customer id: " + custId + " and session id: " + sessionId);
-
-                    var options = {
-                        uri: endpoints.cartsUrl + "/" + custId + "/merge" + "?sessionId=" + sessionId,
-                        method: 'GET'
-                    };
-                    request(options, function(error, response, body) {
-                        if (error) {
-                            // if cart fails just log it, it prevenst login
-                            console.log(error);
-                            //return;
-                        }
-                        console.log('Carts merged.');
-                        callback(null, custId);
-                    });
-                }
-            ],
-            function(err, custId) {
-                if (err) {
-                    console.log("Error with log in: " + err);
-                    res.status(401);
-                    res.end();
-                    return;
-                }
-                res.status(200);
-                res.cookie(cookie_name, req.session.id, {
-                    maxAge: 3600000
-                }).send('Cookie is set');
-                console.log("Sent cookies.");
-                res.end();
-                return;
-            });
-    });
+//    app.get("/login", function(req, res, next) {
+//        console.log("Received login request");
+//
+//        async.waterfall([
+//                function(callback) {
+//                    var options = {
+//                        headers: {
+//                            'Authorization': req.get('Authorization')
+//                        },
+//                        uri: endpoints.loginUrl
+//                    };
+//                    request(options, function(error, response, body) {
+//                        if (error) {
+//                            callback(error);
+//                            return;
+//                        }
+//                        if (response.statusCode == 200 && body != null && body != "") {
+//                            console.log(body);
+//                            var customerId = JSON.parse(body).user.id;
+//                            console.log(customerId);
+//                            req.session.customerId = customerId;
+//                            callback(null, customerId);
+//                            return;
+//                        }
+//                        console.log(response.statusCode);
+//                        callback(true);
+//                    });
+//                },
+//                function(custId, callback) {
+//                    var sessionId = req.session.id;
+//                    console.log("Merging carts for customer id: " + custId + " and session id: " + sessionId);
+//
+//                    var options = {
+//                        uri: endpoints.cartsUrl + "/" + custId + "/merge" + "?sessionId=" + sessionId,
+//                        method: 'GET'
+//                    };
+//                    request(options, function(error, response, body) {
+//                        if (error) {
+//                            // if cart fails just log it, it prevenst login
+//                            console.log(error);
+//                            //return;
+//                        }
+//                        console.log('Carts merged.');
+//                        callback(null, custId);
+//                    });
+//                }
+//            ],
+//            function(err, custId) {
+//                if (err) {
+//                    console.log("Error with log in: " + err);
+//                    res.status(401);
+//                    res.end();
+//                    return;
+//                }
+//                res.status(200);
+//                res.cookie(cookie_name, req.session.id, {
+//                    maxAge: 3600000
+//                }).send('Cookie is set');
+//                console.log("Sent cookies.");
+//                res.end();
+//                return;
+//            });
+//    });
 
     module.exports = app;
 }());

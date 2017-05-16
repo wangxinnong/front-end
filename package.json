@@ -20,15 +20,17 @@
   "dependencies": {
     "async": "^1.5.2",
     "body-parser": "^1.15.1",
+    "connect-redis": "^3.2.0",
     "cookie-parser": "^1.4.3",
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "finalhandler": "^0.4.1",
-    "request": "^2.72.0",
-    "serve-static": "^1.10.2",
-    "prom-client": "^6.3.0",
+    "hogan-express": "^0.5.2",
+    "keycloak-connect": "^3.1.0-cr.1",
     "morgan": "^1.7.0",
-    "connect-redis": "^3.2.0"
+    "prom-client": "^6.3.0",
+    "request": "^2.72.0",
+    "serve-static": "^1.10.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
